@@ -4,6 +4,15 @@ InsightlyAI is a production-grade SaaS analytics platform that allows enterprise
 
 The platform combines modern full-stack development, data processing, and AI analysis into a single workflow.s.
 
+## Demo
+<img width="1919" height="1005" alt="Screenshot 2026-03-04 143410" src="https://github.com/user-attachments/assets/7578aa06-7e1c-432b-adc7-cb4e3268b88d" />
+<img width="1919" height="1010" alt="Screenshot 2026-03-04 143422" src="https://github.com/user-attachments/assets/5532f6ad-8128-417f-9b68-7fe432b0b72c" />
+<img width="1919" height="1013" alt="Screenshot 2026-03-04 143437" src="https://github.com/user-attachments/assets/249277e4-8906-479a-bfad-7b0d6bbdd254" />
+<img width="1919" height="1010" alt="Screenshot 2026-03-04 143614" src="https://github.com/user-attachments/assets/353aa0c3-9df7-489c-b402-dba574a73b09" />
+<img width="1919" height="1008" alt="Screenshot 2026-03-04 143512" src="https://github.com/user-attachments/assets/0b8f4495-442b-45f2-86ce-d5a897978a18" />
+<img width="1919" height="1004" alt="Screenshot 2026-03-04 143527" src="https://github.com/user-attachments/assets/314cadaa-f15c-4026-ae5a-f048b0efd82b" />
+<img width="1919" height="1004" alt="Screenshot 2026-03-04 143555" src="https://github.com/user-attachments/assets/34bd9e53-534a-457b-b7bb-c5c569cd8d69" />
+
 ## Repository Structure
 
 ```
