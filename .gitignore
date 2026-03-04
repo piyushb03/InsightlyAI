@@ -1,27 +1,46 @@
+# ==============================
 # Dependencies
+# ==============================
 frontend/node_modules/
 backend/.venv/
+.venv/
 
-# Environment variables
+# ==============================
+# Environment Variables
+# ==============================
 frontend/.env.local
+frontend/.env
 backend/.env
+.env
 
+# ==============================
 # Next.js
+# ==============================
 frontend/.next/
 frontend/out/
 
+# ==============================
 # Python
+# ==============================
 __pycache__/
 *.pyc
 *.pyo
+backend/__pycache__/
 .pytest_cache/
 
-# Database
+# ==============================
+# Database / Runtime Files
+# ==============================
 backend/instance/
+backend/uploads/
 
-# Claude Code settings
+# ==============================
+# Claude
+# ==============================
 .claude/
 
-# OS
+# ==============================
+# OS Files
+# ==============================
 .DS_Store
 Thumbs.db
