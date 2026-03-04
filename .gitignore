@@ -1,0 +1,27 @@
+# Dependencies
+frontend/node_modules/
+backend/.venv/
+
+# Environment variables
+frontend/.env.local
+backend/.env
+
+# Next.js
+frontend/.next/
+frontend/out/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# Database
+backend/instance/
+
+# Claude Code settings
+.claude/
+
+# OS
+.DS_Store
+Thumbs.db
