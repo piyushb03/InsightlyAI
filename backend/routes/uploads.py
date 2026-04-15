@@ -29,29 +29,38 @@ def list_uploads():
 @uploads_bp.route("", methods=["POST"])
 @require_auth
 def create_upload():
-    if "file" not in request.files:
-        return jsonify({"error": "No file provided"}), 400
+    try:
+        if "file" not in request.files:
+            return jsonify({"error": "No file provided"}), 400
 
-    file = request.files["file"]
-    if not file.filename or not allowed_file(file.filename):
-        return jsonify({"error": "File must be CSV or Excel (.xlsx, .xls)"}), 400
+        file = request.files["file"]
+        if not file.filename or not allowed_file(file.filename):
+            return jsonify({"error": "File must be CSV or Excel (.xlsx, .xls)"}), 400
 
-    filename = secure_filename(file.filename)
-    user_dir = os.path.join(current_app.config["UPLOAD_FOLDER"], request.current_user.id)
-    os.makedirs(user_dir, exist_ok=True)
+        filename = secure_filename(file.filename)
+        # If secure_filename strips all characters, provide a fallback.
+        if not filename:
+            filename = "upload_file.csv"
 
-    storage_key = os.path.join(request.current_user.id, filename)
-    file_path = os.path.join(current_app.config["UPLOAD_FOLDER"], storage_key)
-    file.save(file_path)
+        user_dir = os.path.join(current_app.config["UPLOAD_FOLDER"], str(request.current_user.id))
+        os.makedirs(user_dir, exist_ok=True)
 
-    upload = Upload(
-        user_id=request.current_user.id,
-        filename=filename,
-        storage_key=storage_key,
-        status="pending",
-    )
-    db.session.add(upload)
-    db.session.commit()
+        storage_key = os.path.join(str(request.current_user.id), filename)
+        file_path = os.path.join(current_app.config["UPLOAD_FOLDER"], storage_key)
+        file.save(file_path)
+
+        upload = Upload(
+            user_id=request.current_user.id,
+            filename=filename,
+            storage_key=storage_key,
+            status="pending",
+        )
+        db.session.add(upload)
+        db.session.commit()
+    except Exception as e:
+        import traceback
+        return jsonify({"error": "Server error during upload setup: " + str(e), "trace": traceback.format_exc()}), 500
+
 
     # Ingest synchronously (fast for small files)
     try:
