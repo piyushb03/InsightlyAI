@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
 from config import Config
@@ -28,6 +28,14 @@ def create_app():
     app.register_blueprint(insights_bp, url_prefix="/api/insights")
     app.register_blueprint(forecast_bp, url_prefix="/api/forecast")
     app.register_blueprint(export_bp, url_prefix="/api/export-report")
+
+    from werkzeug.exceptions import HTTPException
+    @app.errorhandler(Exception)
+    def handle_exception(e):
+        import traceback
+        if isinstance(e, HTTPException):
+            return jsonify({"error": f"HTTP Exception {e.code}: {e.name}", "trace": e.description}), e.code
+        return jsonify({"error": "Global Server Error: " + str(e), "trace": traceback.format_exc()}), 500
 
     @app.get("/health")
     def health():
