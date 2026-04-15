@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { cookies } from "next/headers";
 import { BarChart2, Upload, Sparkles, TrendingUp, ArrowRight, CheckCircle2, Zap, Shield, BarChart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -37,7 +38,10 @@ const benefits = [
   "One-click CSV export",
 ];
 
-export default function LandingPage() {
+export default async function LandingPage() {
+  const cookieStore = await cookies();
+  const isLoggedIn = !!cookieStore.get("token")?.value;
+
   return (
     <div className="min-h-screen bg-[#07060f] text-white overflow-x-hidden">
 
@@ -57,17 +61,28 @@ export default function LandingPage() {
           <span className="font-bold text-lg tracking-tight">InsightlyAI</span>
         </div>
         <div className="flex items-center gap-3">
-          <Link href="/login">
-            <Button variant="ghost" className="text-white/70 hover:text-white hover:bg-white/5">
-              Sign in
-            </Button>
-          </Link>
-          <Link href="/signup">
-            <Button className="bg-violet-600 hover:bg-violet-500 text-white shadow-lg shadow-violet-900/40 transition-all hover:shadow-violet-800/50">
-              Get started free
-              <ArrowRight className="ml-1.5 h-4 w-4" />
-            </Button>
-          </Link>
+          {isLoggedIn ? (
+            <Link href="/dashboard">
+              <Button className="bg-violet-600 hover:bg-violet-500 text-white shadow-lg transition-all">
+                Go to Dashboard
+                <ArrowRight className="ml-1.5 h-4 w-4" />
+              </Button>
+            </Link>
+          ) : (
+            <>
+              <Link href="/login">
+                <Button variant="ghost" className="text-white/70 hover:text-white hover:bg-white/5">
+                  Sign in
+                </Button>
+              </Link>
+              <Link href="/signup">
+                <Button className="bg-violet-600 hover:bg-violet-500 text-white shadow-lg shadow-violet-900/40 transition-all hover:shadow-violet-800/50">
+                  Get started free
+                  <ArrowRight className="ml-1.5 h-4 w-4" />
+                </Button>
+              </Link>
+            </>
+          )}
         </div>
       </nav>
 
@@ -89,24 +104,38 @@ export default function LandingPage() {
         </p>
 
         <div className="animate-fade-up animation-delay-300 flex flex-col sm:flex-row gap-3 mb-12">
-          <Link href="/signup">
-            <Button
-              size="lg"
-              className="bg-violet-600 hover:bg-violet-500 text-white text-base px-8 py-6 shadow-2xl shadow-violet-900/50 glow-violet transition-all hover:scale-[1.02]"
-            >
-              Start for free
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-          </Link>
-          <Link href="/login">
-            <Button
-              size="lg"
-              variant="outline"
-              className="text-base px-8 py-6 border-white/10 bg-white/5 hover:bg-white/10 text-white/80 hover:text-white backdrop-blur-sm"
-            >
-              Sign in to dashboard
-            </Button>
-          </Link>
+          {isLoggedIn ? (
+            <Link href="/dashboard">
+              <Button
+                size="lg"
+                className="bg-violet-600 hover:bg-violet-500 text-white text-base px-8 py-6 shadow-2xl shadow-violet-900/50 glow-violet transition-all hover:scale-[1.02]"
+              >
+                Go to your Dashboard
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </Link>
+          ) : (
+            <>
+              <Link href="/signup">
+                <Button
+                  size="lg"
+                  className="bg-violet-600 hover:bg-violet-500 text-white text-base px-8 py-6 shadow-2xl shadow-violet-900/50 glow-violet transition-all hover:scale-[1.02]"
+                >
+                  Start for free
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
+              <Link href="/login">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="text-base px-8 py-6 border-white/10 bg-white/5 hover:bg-white/10 text-white/80 hover:text-white backdrop-blur-sm"
+                >
+                  Sign in to dashboard
+                </Button>
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Benefits checklist */}
@@ -222,16 +251,18 @@ export default function LandingPage() {
         <div className="glass-card glow-border p-10 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-violet-900/20 to-indigo-900/20 pointer-events-none" />
           <Shield className="mx-auto h-8 w-8 text-violet-400 mb-4" />
-          <h2 className="text-3xl font-bold mb-3">Ready to unlock your sales data?</h2>
+          <h2 className="text-3xl font-bold mb-3">
+            {isLoggedIn ? "Ready to dive into your next dataset?" : "Ready to unlock your sales data?"}
+          </h2>
           <p className="text-white/40 mb-8">
-            Free forever. No credit card. Your data stays private.
+             {isLoggedIn ? "Access your dashboards and predictive models instantly." : "Free forever. No credit card. Your data stays private."}
           </p>
-          <Link href="/signup">
+          <Link href={isLoggedIn ? "/dashboard" : "/signup"}>
             <Button
               size="lg"
               className="bg-violet-600 hover:bg-violet-500 text-white text-base px-10 py-6 shadow-2xl shadow-violet-900/50 glow-violet transition-all hover:scale-[1.02]"
             >
-              Create your free account
+              {isLoggedIn ? "Head to Dashboard" : "Create your free account"}
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </Link>
