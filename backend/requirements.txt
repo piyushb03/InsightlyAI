@@ -1,5 +1,5 @@
 Flask
-Flask-Bcrypt
+Flask-Migrate
 flask-cors
 Flask-SQLAlchemy
 gunicorn
