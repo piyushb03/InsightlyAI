@@ -26,6 +26,17 @@ export async function POST(request) {
     );
   }
 
-  const data = await res.json();
+  let data;
+  let responseText = "";
+  try {
+    responseText = await res.text();
+    data = JSON.parse(responseText);
+  } catch (err) {
+    return NextResponse.json(
+      { error: `Backend returned unexpected response: ${responseText.slice(0, 200)}` },
+      { status: res.status }
+    );
+  }
+  
   return NextResponse.json(data, { status: res.status });
 }
