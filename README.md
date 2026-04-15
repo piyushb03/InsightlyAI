@@ -1,164 +1,129 @@
-## Project Overview
+# InsightlyAI — Sales Intelligence Platform
 
-InsightlyAI is a production-grade SaaS analytics platform that allows enterprises to upload sales data (Excel/CSV), automatically generate dashboards, receive AI-powered insights, perform sales forecasting, and export analytical reports.
+InsightlyAI is a full-stack, AI-powered sales intelligence platform. It allows users to upload raw sales data (CSV/Excel) and instantly generates interactive dashboards, predictive forecasts using Prophet, and deep actionable insights using Google's Gemini / Groq LLMs.
 
-The platform combines modern full-stack development, data processing, and AI analysis into a single workflow.s.
+---
 
-## Demo
-<img width="1919" height="1005" alt="Screenshot 2026-03-04 143410" src="https://github.com/user-attachments/assets/7578aa06-7e1c-432b-adc7-cb4e3268b88d" />
-<img width="1919" height="1010" alt="Screenshot 2026-03-04 143422" src="https://github.com/user-attachments/assets/5532f6ad-8128-417f-9b68-7fe432b0b72c" />
-<img width="1919" height="1013" alt="Screenshot 2026-03-04 143437" src="https://github.com/user-attachments/assets/249277e4-8906-479a-bfad-7b0d6bbdd254" />
-<img width="1919" height="1010" alt="Screenshot 2026-03-04 143614" src="https://github.com/user-attachments/assets/353aa0c3-9df7-489c-b402-dba574a73b09" />
-<img width="1919" height="1008" alt="Screenshot 2026-03-04 143512" src="https://github.com/user-attachments/assets/0b8f4495-442b-45f2-86ce-d5a897978a18" />
-<img width="1919" height="1004" alt="Screenshot 2026-03-04 143527" src="https://github.com/user-attachments/assets/314cadaa-f15c-4026-ae5a-f048b0efd82b" />
-<img width="1919" height="1004" alt="Screenshot 2026-03-04 143555" src="https://github.com/user-attachments/assets/34bd9e53-534a-457b-b7bb-c5c569cd8d69" />
+## 🌟 Features
 
-## Repository Structure
+- **Instant Dashboards**: Upload a dataset and automatically get KPI cards, trend lines, and category visualizations without manual configuration.
+- **AI-Powered Insights**: Uses LLMs to generate text-based executive summaries, top performers, anomalies, and business recommendations from your data schema and statistics.
+- **Prophet Forecasting**: Built-in 90-day time-series forecasting for revenue and sales metrics.
+- **PDF Export**: One-click download of a beautifully formatted PDF report containing all AI insights and data summaries for the uploaded file.
+- **Secure Authentication**: End-to-end authentication and secure, tenant-isolated data access.
+- **Sleek UI**: A premium dark-mode aesthetic built with Next.js, Tailwind CSS, and shadcn/ui.
 
+---
+
+## 🛠 Tech Stack
+
+### Frontend
+- Next.js (App Router)
+- React & Tailwind CSS
+- Recharts (Data Visualization)
+- Lucide Icons & shadcn/ui
+
+### Backend
+- Python & Flask
+- SQLAlchemy (SQLite/PostgreSQL)
+- ReportLab (PDF Generation)
+- Prophet (Time-series Forecasting)
+- Groq / python-dotenv
+
+---
+
+## 🚀 Setup Instructions (Local Development)
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/piyushb03/InsightlyAI.git
+cd InsightlyAI
 ```
-insightlyai/
-├── frontend/    Next.js 16 (App Router) — UI + API routes
-└── backend/     Flask (Python) — auth, data processing, AI, forecasting
-```
 
-## Tech Stack
+### 2. Backend Setup
+We use standard Python and `pip` for dependencies. **Virtual environments are not required** if you wish to run on system python, but ensure you have Python 3.10+ installed.
 
-| Layer | Choice |
-|---|---|
-| Frontend + API | Next.js 16, JavaScript (JSX), Tailwind CSS v4, shadcn/ui, Recharts |
-| Backend | Flask, SQLAlchemy, Werkzeug (password hashing), PyJWT |
-| Data / AI | pandas, Prophet, Groq API (`llama-3.3-70b-versatile`) via `groq` |
-| Database | SQLite (dev) via SQLAlchemy — `backend/instance/insightlyai.db` |
-| File Storage | Local filesystem — `backend/uploads/{user_id}/{filename}` |
-| Package managers | npm (JS)|
-
-## Commands
 ```bash
 cd backend
+
+# Install dependencies directly
 pip install -r requirements.txt
+
+# Set up environment variables
+# Create a .env file based on backend configuration needs
+echo "GROQ_API_KEY=your_api_key" > .env
+echo "JWT_SECRET=your_secret_key" >> .env
+
+# Run the Flask server
+python main.py
 ```
-### Frontend (`frontend/`)
+*The backend will be available at `http://localhost:8000`*
+
+### 3. Frontend Setup
 ```bash
-npm run dev       # Start dev server (localhost:3000)
-npm run build     # Production build
+cd frontend
+
+# Install dependencies
+npm install
+
+# Set up environment variables
+# Create a .env.local file
+echo "NEXT_PUBLIC_API_URL=http://localhost:8000" > .env.local
+
+# Run the Next.js development server
+npm run dev
 ```
+*The frontend will be available at `http://localhost:3000`*
 
-### Backend (`backend/`)
-```bash
-python main.py              # Start Flask dev server (localhost:8000)
+---
 
-```
+## 🌍 Deployment Instructions
 
-**Important:** Flask reads `.env` once at startup via `load_dotenv()` in `config.py`. Any changes to `backend/.env` require a Flask restart to take effect.
+### Backend (Render)
+The backend is designed to be easily deployed on [Render.com](https://render.com) using the included `Procfile`.
 
-## Architecture
+1. Create a new **Web Service** on Render.
+2. Link your GitHub repository.
+3. Configure the following settings:
+   - **Root Directory**: `backend`
+   - **Environment**: `Python`
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `gunicorn --bind 0.0.0.0:$PORT main:app`
+4. Add your Environment Variables (`GROQ_API_KEY`, `JWT_SECRET`, `CORS_ORIGINS`).
+5. Deploy!
 
-### Auth Flow
-```
-Browser → POST /api/auth/login or /signup
-  → Next.js API route (app/api/auth/*/route.js)
-    → Flask /api/auth/* (Werkzeug password check, PyJWT token)
-    → Next.js sets httpOnly cookie: token=<jwt>
-  → proxy.js checks cookie on every request
-  → Dashboard/upload pages pass token as Authorization: Bearer <jwt>
-    → Flask @require_auth decorator validates JWT, attaches request.current_user
-```
+### Frontend (Vercel)
+The frontend is optimized for deployment on [Vercel](https://vercel.com).
 
-### Data Flow
-```
-User uploads file
-  → Next.js /api/upload/route.js (streams raw body with duplex:"half" to preserve multipart boundary)
-    → Flask POST /api/uploads (saves file, calls ingestor.py synchronously)
-    → services/ingestor.py: pandas parse → col_schema + stats
-    → _build_dashboard_config() auto-generates dashboard config in DB
-    → Returns {upload, dashboard_id}
+1. Import your GitHub repository into Vercel.
+2. Set the **Framework Preset** to Next.js.
+3. Set the **Root Directory** to `frontend`.
+4. Add the Environment Variable: `NEXT_PUBLIC_API_URL` (pointing to your Render backend URL).
+5. Deploy! Vercel will automatically build and publish your site.
 
-User clicks "Generate Insights"
-  → DashboardGrid (client) → POST /api/insights/[upload_id]/generate
-    → Flask /api/insights/<id>/generate → services/insight_engine.py → Groq API
-    → Stored + returned as Insight.content JSON
+> **Note on Cold Starts:** Render free-tier servers go to sleep after inactivity. The frontend intelligently pings the `/health` endpoint in the background to wake the server gracefully and provides users with a sleek "Initializing AI Engine" loading screen.
 
-User clicks "Generate Forecast"
-  → DashboardGrid (client) → POST /api/forecast/[upload_id]/generate
-    → Flask /api/forecast/<id>/generate → services/forecaster.py → Prophet model
-    → Stored + returned as Forecast.data JSON array
-```
+---
 
-### Frontend App Structure (`frontend/app/`)
-- `page.jsx` — Public landing page (glassmorphism dark mode)
-- `login/` + `signup/` — Auth pages (client-side fetch to Next.js API routes)
-- `dashboard/page.jsx` — Dashboard list (server component, calls Flask directly via `flaskFetch()`)
-- `dashboard/[id]/page.jsx` — Individual dashboard (server component; fetches dashboard + insight + forecast, passes to `DashboardGrid`)
-- `upload/page.jsx` — File upload (client component, react-dropzone)
-- `api/auth/` — login, signup, logout (proxy to Flask, set/clear JWT cookie)
-- `api/upload/`, `api/insights/[upload_id]/generate/`, `api/forecast/[upload_id]/generate/`, `api/export/[upload_id]/` — Proxy routes to Flask
+## 🔌 Core API Endpoints
 
-**Server vs client component pattern:**
-- Server components (`dashboard/page.jsx`, `dashboard/[id]/page.jsx`) call Flask directly using `flaskFetch()` from `lib/api.js` and read the JWT from the cookie store.
-- Client components (`DashboardGrid`, `upload/page.jsx`) call the Next.js API proxy routes (never Flask directly).
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| **GET** | `/health` | Application health check. Crucial for waking up Render servers. |
+| **POST** | `/api/auth/register` | Register a new user. |
+| **POST** | `/api/auth/login` | Authenticate and retrieve JWT token. |
+| **POST** | `/api/uploads/` | Upload and securely parse a CSV/Excel dataset. |
+| **GET** | `/api/dashboards/<id>` | Fetch parsed dashboard configurations and statistics. |
+| **POST** | `/api/insights/<upload_id>/generate` | Trigger LLM to generate insights from statistics. |
+| **POST** | `/api/forecast/<upload_id>/generate` | Generate 90-day Prophet forecast. |
+| **GET** | `/api/export-report/<upload_id>` | Generate and download a PDF report containing AI insights. |
 
-**Middleware setup (Next.js 16):** Route protection lives in `proxy.js` which exports a `proxy` function and `config` matcher. Next.js 16 uses `proxy.js` directly as the middleware file (no separate `middleware.js` needed).
+---
 
-### Backend Structure (`backend/`)
-- `main.py` — Flask app factory, registers all blueprints
-- `models.py` — SQLAlchemy models: User, Upload, Dashboard, Insight, Forecast
-- `auth_utils.py` — `create_token`, `decode_token`, `@require_auth` decorator
-- `database.py` — SQLAlchemy + Flask-Migrate setup
-- `config.py` — Settings loaded from `.env`
-- `routes/auth.py` — `/api/auth/signup`, `/api/auth/login`, `/api/auth/me`
-- `routes/uploads.py` — File upload, listing, `_build_dashboard_config()` auto-generation
-- `routes/dashboards.py` — Dashboard CRUD
-- `routes/insights.py` — Insight generation + retrieval
-- `routes/forecast.py` — Forecast generation + retrieval
-- `routes/export.py` — File download (serves from `uploads/{user_id}/{filename}`)
-- `services/ingestor.py` — pandas CSV/Excel parsing
-- `services/insight_engine.py` — Groq API call (llama-3.3-70b-versatile), structured JSON output
-- `services/forecaster.py` — Prophet time-series forecast
+## 📸 Screenshots
 
-### Data Schemas
+| Landing Page | Dashboard |
+|--------------|-----------|
+| ![Landing Page Preview](#) | ![Dashboard Preview](#) |
 
-**`ingestor.py` return value:**
-```python
-{
-  "row_count": int,
-  "col_schema": [{"name": str, "dtype": "date"|"numeric"|"categorical", "unique_count": int, "sample_values": list}],
-  "stats": {
-    "<col>": {"sum", "mean", "min", "max", "nunique"},          # numeric cols
-    "<col>": {"nunique", "top_values": {str: int}},             # categorical cols
-    "<col>": {"min", "max", "nunique"},                          # date cols
-    "_time_series": {"date_col": str, "series": {"<numCol>": [{"date": "YYYY-MM", "value": float}]}}
-  }
-}
-```
-
-**Dashboard `config` JSON (stored in `dashboards.config`):**
-```json
-[
-  {"type": "SalesLineChart", "date_col": "...", "value_col": "...", "title": "..."},
-  {"type": "KPICard", "col": "..."},
-  {"type": "CategoryBarChart", "col": "...", "title": "..."}
-]
-```
-Generated automatically by `_build_dashboard_config()` in `routes/uploads.py` on every upload.
-
-**Insight `content` JSON:**
-```json
-{"summary": "...", "top_performers": [...], "anomalies": [...], "trends": [...], "recommendations": [...]}
-```
-
-### Database (SQLite via SQLAlchemy)
-Five tables: `users`, `uploads`, `dashboards`, `insights`, `forecasts`.
-All user-scoped tables filter by `user_id` in every query (enforced in route handlers).
-DB file auto-created at `backend/instance/insightlyai.db` on first run.
-
-## Environment Variables
-
-**`frontend/.env.local`**
-```
-FASTAPI_URL=http://localhost:8000
-```
-
-**`backend/.env`**
-```
-GROQ_API_KEY=                  # Groq key (console.groq.com) — free tier: 14,400 req/day
-DATABASE_URL=                  # Optional — defaults to sqlite:///insightlyai.db
+*Screenshots to be added after initial deployment.*

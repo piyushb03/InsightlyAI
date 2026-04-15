@@ -7,7 +7,7 @@ export async function GET(_request, { params }) {
   const cookieStore = await cookies();
   const token = cookieStore.get("token")?.value ?? "";
 
-  const res = await fetch(`${FLASK_URL}/api/export/${upload_id}`, {
+  const res = await fetch(`${FLASK_URL}/api/export-report/${upload_id}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 

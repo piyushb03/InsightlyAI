@@ -125,7 +125,7 @@ export default function DashboardGrid({ dashboard, insight: initialInsight, fore
           <Button size="sm" variant="outline" className="gap-1.5 text-xs" asChild>
             <a href={`/api/export/${dashboard.upload_id}`} download>
               <Download className="h-3.5 w-3.5" />
-              Export
+              Export PDF
             </a>
           </Button>
         </div>

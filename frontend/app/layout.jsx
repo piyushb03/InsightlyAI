@@ -1,5 +1,6 @@
 import { Geist } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
+import { HealthProvider } from "@/components/HealthProvider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -16,8 +17,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className="dark">
       <body className={`${geistSans.variable} antialiased`}>
-        {children}
-        <Toaster richColors />
+        <HealthProvider>
+          {children}
+          <Toaster richColors />
+        </HealthProvider>
       </body>
     </html>
   );
