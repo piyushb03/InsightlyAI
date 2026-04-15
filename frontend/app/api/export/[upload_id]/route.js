@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 
-const FLASK_URL = process.env.FASTAPI_URL ?? "http://localhost:8000";
+const FLASK_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
 export async function GET(_request, { params }) {
   const { upload_id } = await params;

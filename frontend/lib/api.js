@@ -1,4 +1,4 @@
-const FLASK_URL = process.env.FASTAPI_URL ?? "http://localhost:8000";
+const FLASK_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
 export async function flaskFetch(path, options = {}) {
   const res = await fetch(`${FLASK_URL}${path}`, {
