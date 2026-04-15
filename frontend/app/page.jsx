@@ -209,7 +209,6 @@ export default function LandingPage() {
                 <div className="w-14 h-14 rounded-2xl glass-strong flex items-center justify-center ring-1 ring-violet-500/20">
                   <item.icon className="h-6 w-6 text-violet-400" />
                 </div>
-                <span className="absolute -top-2 -right-2 text-xs font-bold text-violet-400/60">{item.step}</span>
               </div>
               <h3 className="font-semibold mb-2">{item.title}</h3>
               <p className="text-sm text-white/40">{item.desc}</p>

@@ -7,19 +7,16 @@ export async function POST(request) {
   const cookieStore = await cookies();
   const token = cookieStore.get("token")?.value ?? "";
 
-  // Forward raw body + original Content-Type (preserves multipart boundary)
-  const contentType = request.headers.get("content-type") ?? "";
-
   let res;
   try {
+    const formData = await request.formData();
+    
     res = await fetch(`${FLASK_URL}/api/uploads`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
-        "Content-Type": contentType,
       },
-      duplex: "half",
-      body: request.body,
+      body: formData,
     });
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
