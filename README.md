@@ -110,7 +110,7 @@ The frontend is optimized for deployment on [Vercel](https://vercel.com).
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | **GET** | `/health` | Application health check. Crucial for waking up Render servers. |
-| **POST** | `/api/auth/register` | Register a new user. |
+| **POST** | `/api/auth/signup` | Register a new user. |
 | **POST** | `/api/auth/login` | Authenticate and retrieve JWT token. |
 | **POST** | `/api/uploads/` | Upload and securely parse a CSV/Excel dataset. |
 | **GET** | `/api/dashboards/<id>` | Fetch parsed dashboard configurations and statistics. |
@@ -120,10 +120,6 @@ The frontend is optimized for deployment on [Vercel](https://vercel.com).
 
 ---
 
-## 📸 Screenshots
+## 🎥 Demo
 
-| Landing Page | Dashboard |
-|--------------|-----------|
-| ![Landing Page Preview](#) | ![Dashboard Preview](#) |
-
-*Screenshots to be added after initial deployment.*
+*A comprehensive screen recording demonstrating the data upload, dashboard generation, and AI insights workflow will be uploaded here shortly.*
