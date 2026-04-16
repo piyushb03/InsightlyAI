@@ -132,12 +132,15 @@ def _detect_dtype(series: pd.Series) -> str:
 def _to_py(val):
     """Convert numpy types to native Python for JSON serialization."""
     import numpy as np
+    import datetime
+    if pd.isna(val):
+        return None
     if isinstance(val, (np.integer,)):
         return int(val)
     if isinstance(val, (np.floating,)):
         return float(val)
     if isinstance(val, (np.bool_,)):
         return bool(val)
-    if isinstance(val, float) and (val != val):  # NaN check
-        return None
+    if isinstance(val, (datetime.datetime, datetime.date, pd.Timestamp)):
+        return val.isoformat()
     return val
