@@ -23,12 +23,12 @@ export default function Sidebar() {
 
   return (
     <aside className="flex h-full w-60 flex-col border-r border-white/5 bg-sidebar">
-      <div className="flex h-16 items-center gap-2 border-b border-white/5 px-4">
+      <Link href="/" className="flex h-16 items-center gap-2 border-b border-white/5 px-4 hover:bg-white/[0.02] transition-colors cursor-pointer">
         <div className="p-1.5 rounded-lg bg-violet-500/20 ring-1 ring-violet-500/30">
           <BarChart2 className="h-4 w-4 text-violet-400" />
         </div>
         <span className="font-bold text-sm">InsightlyAI</span>
-      </div>
+      </Link>
 
       <nav className="flex-1 space-y-0.5 p-3">
         {navItems.map(({ href, label, icon: Icon }) => (
