@@ -1,7 +1,5 @@
 Flask
-Flask-Migrate
 flask-cors
-Flask-SQLAlchemy
 gunicorn
 pandas
 openpyxl
@@ -11,4 +9,4 @@ groq
 prophet
 PyJWT
 Werkzeug
-SQLAlchemy
+supabase

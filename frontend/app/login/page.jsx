@@ -1,38 +1,31 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { BarChart2, ArrowRight, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { login } from "@/app/actions/auth";
 
 export default function LoginPage() {
-  const router = useRouter();
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const searchParams = useSearchParams();
+
+  // Show error from auth callback if present
+  const callbackError = searchParams.get("error");
 
   async function handleSubmit(e) {
     e.preventDefault();
-    setLoading(true);
     setError(null);
+    const formData = new FormData(e.currentTarget);
 
-    const fd = new FormData(e.currentTarget);
-    const res = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: fd.get("email"), password: fd.get("password") }),
+    startTransition(async () => {
+      const result = await login(formData);
+      if (result?.error) setError(result.error);
     });
-    const data = await res.json();
-
-    if (!res.ok) {
-      setError(data.error ?? "Login failed");
-      setLoading(false);
-      return;
-    }
-    router.push("/dashboard");
-    router.refresh();
   }
 
   return (
@@ -82,18 +75,18 @@ export default function LoginPage() {
               />
             </div>
 
-            {error && (
+            {(error || callbackError) && (
               <div className="rounded-lg bg-red-500/10 border border-red-500/20 px-3 py-2 text-sm text-red-400">
-                {error}
+                {error ?? "Authentication failed. Please try again."}
               </div>
             )}
 
             <Button
               type="submit"
-              disabled={loading}
+              disabled={isPending}
               className="w-full bg-violet-600 hover:bg-violet-500 text-white py-5 shadow-lg shadow-violet-900/30 glow-violet transition-all hover:scale-[1.01]"
             >
-              {loading ? (
+              {isPending ? (
                 <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Signing in…</>
               ) : (
                 <>Sign in <ArrowRight className="ml-2 h-4 w-4" /></>

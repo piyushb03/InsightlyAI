@@ -43,12 +43,13 @@ def generate_pdf_report(upload, insight=None):
     
     # Header
     elements.append(Paragraph("InsightlyAI Report", title_style))
-    elements.append(Paragraph(f"<b>Dataset:</b> {upload.filename}", body_style))
-    elements.append(Paragraph(f"<b>Created At:</b> {upload.created_at.strftime('%Y-%m-%d %H:%M:%S')} UTC", body_style))
+    elements.append(Paragraph(f"<b>Dataset:</b> {upload['filename']}", body_style))
+    created_at = upload.get("created_at", "")[:19].replace("T", " ")
+    elements.append(Paragraph(f"<b>Created At:</b> {created_at} UTC", body_style))
     elements.append(Spacer(1, 20))
     
-    if insight and insight.content:
-        content = insight.content
+    if insight and insight.get("content"):
+        content = insight["content"]
         
         # Summary
         if "summary" in content and content["summary"]:

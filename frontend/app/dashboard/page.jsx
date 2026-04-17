@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { cookies } from "next/headers";
 import { Upload, LayoutDashboard, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { flaskFetch, getAuthHeaders } from "@/lib/api";
+import { createClient } from "@/lib/supabase/server";
 
 async function getDashboards(token) {
   try {
@@ -17,8 +17,9 @@ async function getDashboards(token) {
 }
 
 export default async function DashboardPage() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("token")?.value ?? "";
+  const supabase = await createClient();
+  const { data: { session } } = await supabase.auth.getSession();
+  const token = session?.access_token ?? "";
   const dashboards = await getDashboards(token);
 
   return (

@@ -1,7 +1,6 @@
-import { NextResponse } from "next/server";
+// This route is no longer used.
+// Logout is handled by the logout() Server Action in app/actions/auth.js
 
 export async function POST() {
-  const response = NextResponse.json({ success: true });
-  response.cookies.set("token", "", { maxAge: 0, path: "/" });
-  return response;
+  return new Response(JSON.stringify({ deprecated: true }), { status: 410 });
 }

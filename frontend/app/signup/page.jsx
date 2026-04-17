@@ -1,40 +1,59 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { BarChart2, ArrowRight, Loader2, CheckCircle2 } from "lucide-react";
+import { BarChart2, ArrowRight, Loader2, CheckCircle2, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { signup } from "@/app/actions/auth";
 
 const perks = ["Free forever", "No credit card", "Your data stays private"];
 
 export default function SignupPage() {
-  const router = useRouter();
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [done, setDone] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
   async function handleSubmit(e) {
     e.preventDefault();
-    setLoading(true);
     setError(null);
+    const formData = new FormData(e.currentTarget);
 
-    const fd = new FormData(e.currentTarget);
-    const res = await fetch("/api/auth/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: fd.get("email"), password: fd.get("password") }),
+    startTransition(async () => {
+      const result = await signup(formData);
+      if (result?.error) {
+        setError(result.error);
+      } else {
+        // If email confirmation is on, show a "check your email" screen
+        // If it's off, the server action redirects to /dashboard automatically
+        setDone(true);
+      }
     });
-    const data = await res.json();
+  }
 
-    if (!res.ok) {
-      setError(data.error ?? "Sign up failed");
-      setLoading(false);
-      return;
-    }
-    router.push("/dashboard");
-    router.refresh();
+  if (done) {
+    return (
+      <div className="min-h-screen bg-[#07060f] flex items-center justify-center px-4">
+        <div className="relative z-10 w-full max-w-md text-center animate-fade-up">
+          <div className="glass-card glow-border p-10">
+            <div className="mx-auto p-3 rounded-xl bg-violet-500/20 ring-1 ring-violet-500/30 w-fit mb-5">
+              <Mail className="h-8 w-8 text-violet-400" />
+            </div>
+            <h2 className="text-2xl font-bold text-white mb-2">Check your email</h2>
+            <p className="text-white/50 text-sm leading-relaxed">
+              We&apos;ve sent a confirmation link to your email address.<br />
+              Click the link to activate your account and start exploring InsightlyAI.
+            </p>
+            <p className="text-xs text-white/20 mt-6">
+              <Link href="/login" className="hover:text-white/40 transition-colors">
+                Already confirmed? Sign in →
+              </Link>
+            </p>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -93,10 +112,10 @@ export default function SignupPage() {
 
             <Button
               type="submit"
-              disabled={loading}
+              disabled={isPending}
               className="w-full bg-violet-600 hover:bg-violet-500 text-white py-5 shadow-lg shadow-violet-900/30 glow-violet transition-all hover:scale-[1.01]"
             >
-              {loading ? (
+              {isPending ? (
                 <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Creating account…</>
               ) : (
                 <>Create free account <ArrowRight className="ml-2 h-4 w-4" /></>

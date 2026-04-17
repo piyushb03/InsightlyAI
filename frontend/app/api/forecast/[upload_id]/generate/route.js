@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
+import { createClient } from "@/lib/supabase/server";
 
 const FLASK_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
 export async function POST(request, { params }) {
   const { upload_id } = await params;
-  const cookieStore = await cookies();
-  const token = cookieStore.get("token")?.value ?? "";
+  const supabase = await createClient();
+  const { data: { session } } = await supabase.auth.getSession();
+  const token = session?.access_token ?? "";
 
   const body = await request.text();
 

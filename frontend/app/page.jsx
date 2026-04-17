@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { cookies } from "next/headers";
 import { BarChart2, Upload, Sparkles, TrendingUp, ArrowRight, CheckCircle2, Zap, Shield, BarChart } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { createClient } from "@/lib/supabase/server";
 
 const features = [
   {
@@ -13,7 +13,7 @@ const features = [
   {
     icon: Sparkles,
     title: "AI-Powered Insights",
-    desc: "Gemini AI analyzes your data and surfaces trends, anomalies, and top performers.",
+    desc: "Groq AI analyzes your data and surfaces trends, anomalies, and top performers.",
     color: "from-fuchsia-500 to-violet-500",
   },
   {
@@ -39,8 +39,9 @@ const benefits = [
 ];
 
 export default async function LandingPage() {
-  const cookieStore = await cookies();
-  const isLoggedIn = !!cookieStore.get("token")?.value;
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  const isLoggedIn = !!user;
 
   return (
     <div className="min-h-screen bg-[#07060f] text-white overflow-x-hidden">
@@ -90,7 +91,7 @@ export default async function LandingPage() {
       <section className="relative z-10 flex flex-col items-center text-center px-4 pt-20 pb-24 max-w-4xl mx-auto">
         <div className="animate-fade-up inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 text-sm text-violet-300 mb-8 ring-1 ring-violet-500/20">
           <Zap className="h-3.5 w-3.5" />
-          <span>Powered by Gemini AI + Prophet Forecasting</span>
+          <span>Powered by Groq AI + Prophet Forecasting</span>
         </div>
 
         <h1 className="animate-fade-up animation-delay-100 text-5xl sm:text-6xl md:text-7xl font-extrabold tracking-tight leading-[1.08] mb-6">
@@ -255,7 +256,7 @@ export default async function LandingPage() {
             {isLoggedIn ? "Ready to dive into your next dataset?" : "Ready to unlock your sales data?"}
           </h2>
           <p className="text-white/40 mb-8">
-             {isLoggedIn ? "Access your dashboards and predictive models instantly." : "Free forever. No credit card. Your data stays private."}
+            {isLoggedIn ? "Access your dashboards and predictive models instantly." : "Free forever. No credit card. Your data stays private."}
           </p>
           <Link href={isLoggedIn ? "/dashboard" : "/signup"}>
             <Button
