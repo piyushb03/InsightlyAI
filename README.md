@@ -128,4 +128,4 @@ The frontend is optimized for deployment on [Vercel](https://vercel.com).
 ---
 ## 🎥 Demo
 
-*A comprehensive screen recording demonstrating the data upload, dashboard generation, and AI insights workflow will be uploaded here shortly.*
+
