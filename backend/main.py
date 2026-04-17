@@ -28,7 +28,7 @@ def create_app():
     app.register_blueprint(dashboards_bp, url_prefix="/api/dashboards")
     app.register_blueprint(insights_bp,   url_prefix="/api/insights")
     app.register_blueprint(forecast_bp,   url_prefix="/api/forecast")
-    app.register_blueprint(export_bp,     url_prefix="/api/export-report")
+    app.register_blueprint(export_bp,     url_prefix="/api/export")
 
     from werkzeug.exceptions import HTTPException
     @app.errorhandler(Exception)

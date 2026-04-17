@@ -1,9 +1,43 @@
 from flask import Blueprint, request, jsonify
 from database import get_db
 from auth_utils import require_auth
-from services.insight_engine import generate_insights
+from services.insight_engine import generate_insights, chat_with_data
 
 insights_bp = Blueprint("insights", __name__)
+
+
+@insights_bp.route("/<upload_id>/chat", methods=["POST"])
+@require_auth
+def chat(upload_id):
+    db = get_db()
+
+    # Verify this upload belongs to the current user
+    upload_res = (
+        db.table("uploads")
+        .select("id, status, col_schema, stats")
+        .eq("id", upload_id)
+        .eq("user_id", request.current_user_id)
+        .execute()
+    )
+    if not upload_res.data:
+        return jsonify({"error": "Upload not found"}), 404
+
+    upload = upload_res.data[0]
+    if upload["status"] != "ready":
+        return jsonify({"error": "Upload not ready yet"}), 400
+
+    data = request.get_json() or {}
+    query = data.get("query")
+    history = data.get("history", [])
+
+    if not query:
+        return jsonify({"error": "Query is required"}), 400
+
+    try:
+        response = chat_with_data(query, upload["col_schema"] or [], upload["stats"] or {}, history)
+        return jsonify({"response": response})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 @insights_bp.route("/<upload_id>", methods=["GET"])

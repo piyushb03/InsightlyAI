@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { flaskFetch, getAuthHeaders } from "@/lib/api";
 import DashboardGrid from "@/components/DashboardGrid";
+import ChatDrawer from "@/components/ChatDrawer";
 import { createClient } from "@/lib/supabase/server";
 
 async function getDashboard(id, token) {
@@ -51,10 +52,13 @@ export default async function DashboardDetailPage({ params }) {
   ]);
 
   return (
-    <DashboardGrid
-      dashboard={dashboard}
-      insight={insight}
-      forecast={forecast}
-    />
+    <>
+      <DashboardGrid
+        dashboard={dashboard}
+        insight={insight}
+        forecast={forecast}
+      />
+      <ChatDrawer uploadId={uploadId} />
+    </>
   );
 }

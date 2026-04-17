@@ -129,22 +129,22 @@
 @layer utilities {
   .glass {
     backdrop-filter: blur(20px) saturate(180%);
-    background: oklch(1 0 0 / 4%);
-    border: 1px solid oklch(1 0 0 / 8%);
+    background: color-mix(in srgb, var(--background), transparent 90%);
+    border: 1px solid var(--border);
   }
   .glass-card {
     backdrop-filter: blur(24px) saturate(180%);
-    background: oklch(1 0 0 / 5%);
-    border: 1px solid oklch(1 0 0 / 10%);
+    background: color-mix(in srgb, var(--card), transparent 40%);
+    border: 1px solid var(--border);
     border-radius: 1.25rem;
   }
   .glass-strong {
     backdrop-filter: blur(32px) saturate(200%);
-    background: oklch(1 0 0 / 8%);
-    border: 1px solid oklch(1 0 0 / 15%);
+    background: color-mix(in srgb, var(--card), transparent 20%);
+    border: 1px solid var(--border);
   }
   .text-gradient {
-    background: linear-gradient(135deg, #fff 0%, #c4b5fd 50%, #818cf8 100%);
+    background: linear-gradient(135deg, var(--foreground) 0%, #a78bfa 50%, #6366f1 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -156,10 +156,10 @@
     background-clip: text;
   }
   .glow-violet {
-    box-shadow: 0 0 40px oklch(0.65 0.22 285 / 25%), 0 0 80px oklch(0.65 0.22 285 / 10%);
+    box-shadow: 0 0 40px oklch(0.65 0.22 285 / 15%), 0 0 80px oklch(0.65 0.22 285 / 5%);
   }
   .glow-border {
-    box-shadow: inset 0 1px 0 oklch(1 0 0 / 12%), 0 1px 3px oklch(0 0 0 / 30%);
+    box-shadow: inset 0 1px 0 color-mix(in srgb, var(--foreground), transparent 90%), 0 1px 3px oklch(0 0 0 / 10%);
   }
 }
 

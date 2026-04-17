@@ -28,6 +28,32 @@ def list_uploads():
     return jsonify(res.data)
 
 
+@uploads_bp.route("/<upload_id>", methods=["DELETE"])
+@require_auth
+def delete_upload(upload_id):
+    db = get_db()
+    # 1. Get storage key to delete the physical file
+    res = db.table("uploads").select("storage_key").eq("id", upload_id).eq("user_id", request.current_user_id).execute()
+    if not res.data:
+        return jsonify({"error": "Upload not found"}), 404
+
+    storage_key = res.data[0]["storage_key"]
+
+    # 2. Delete from DB (this will cascade to dashboards, insights, and forecasts due to RLS/Foreign Keys)
+    db.table("uploads").delete().eq("id", upload_id).execute()
+
+    # 3. Delete the physical file from local storage
+    file_path = os.path.join(current_app.config["UPLOAD_FOLDER"], storage_key)
+    try:
+        if os.path.exists(file_path):
+            os.remove(file_path)
+    except Exception as e:
+        # We log the error but return success since the DB record is gone
+        print(f"Error deleting file {file_path}: {e}")
+
+    return jsonify({"success": True})
+
+
 @uploads_bp.route("", methods=["POST"])
 @require_auth
 def create_upload():

@@ -1,2 +1,0 @@
-// RENAMED: This file's logic has been moved to proxy.js (Next.js 16 uses proxy.js).
-// Keeping this file as a non-JS comment file to avoid next.js picking it up.

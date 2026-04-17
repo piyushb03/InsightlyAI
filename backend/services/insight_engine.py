@@ -43,3 +43,39 @@ Return a JSON object with exactly these keys:
 - "recommendations": (array of strings) 3-5 actionable business recommendations
 
 Respond with ONLY valid JSON, no markdown, no extra text."""
+
+
+def chat_with_data(query: str, col_schema: list, stats: dict, chat_history: list = None) -> str:
+    client = Groq(api_key=Config.GROQ_API_KEY)
+
+    schema_str = json.dumps(col_schema, indent=2)
+    stats_str = json.dumps(stats, indent=2)
+
+    messages = [
+        {
+            "role": "system",
+            "content": (
+                "You are InsightlyAI, a helpful sales intelligence assistant. "
+                "You have access to the following data schema and statistics from the user's uploaded dataset:\n"
+                f"Schema: {schema_str}\n"
+                f"Stats: {stats_str}\n\n"
+                "Answer the user's questions accurately based ONLY on this data. "
+                "If the data doesn't contain information to answer the question, politely say so. "
+                "Be concise, professional, and highlight key numbers where relevant. "
+                "Use markdown for formatting if needed."
+            )
+        },
+    ]
+
+    if chat_history:
+        messages.extend(chat_history)
+
+    messages.append({"role": "user", "content": query})
+
+    response = client.chat.completions.create(
+        model="llama-3.3-70b-versatile",
+        messages=messages,
+        temperature=0.3,
+    )
+
+    return response.choices[0].message.content

@@ -12,8 +12,8 @@ const features = [
   },
   {
     icon: Sparkles,
-    title: "AI-Powered Insights",
-    desc: "Groq AI analyzes your data and surfaces trends, anomalies, and top performers.",
+    title: "AI Data Assistant",
+    desc: "Chat naturally with your datasets. Ask questions and get instant, data-driven answers.",
     color: "from-fuchsia-500 to-violet-500",
   },
   {
@@ -89,8 +89,8 @@ export default async function LandingPage() {
 
       {/* ── Hero ── */}
       <section className="relative z-10 flex flex-col items-center text-center px-4 pt-20 pb-24 max-w-4xl mx-auto">
-        <div className="animate-fade-up inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 text-sm text-violet-300 mb-8 ring-1 ring-violet-500/20">
-          <Zap className="h-3.5 w-3.5" />
+        <div className="animate-fade-up inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 text-[10px] sm:text-sm text-violet-300 mb-8 ring-1 ring-violet-500/20 whitespace-nowrap">
+          <Zap className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
           <span>Powered by Groq AI + Prophet Forecasting</span>
         </div>
 
@@ -161,15 +161,21 @@ export default async function LandingPage() {
               <div className="w-3 h-3 rounded-full bg-green-500/60" />
               <div className="ml-3 flex-1 h-6 rounded bg-white/5 max-w-xs" />
             </div>
-            {/* Fake KPI row */}
-            <div className="grid grid-cols-4 gap-3 mb-4">
-              {["$284K", "1,240", "$229", "94.3%"].map((v, i) => (
-                <div key={i} className="glass rounded-xl p-3">
-                  <div className="text-xs text-white/30 mb-1">{["Revenue", "Orders", "Avg Order", "Growth"][i]}</div>
-                  <div className="text-lg font-bold text-gradient-violet">{v}</div>
-                </div>
-              ))}
-            </div>
+            {/* Fake Dashboard Content */}
+            <div className="space-y-6">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                {[
+                  { l: "Revenue", v: "$28.4K", c: "text-violet-400" },
+                  { l: "Orders", v: "1,240", c: "text-blue-400" },
+                  { l: "Avg Order", v: "$22.9", c: "text-emerald-400" },
+                  { l: "Growth", v: "+14.2%", c: "text-fuchsia-400" },
+                ].map((kpi) => (
+                  <div key={kpi.l} className="glass-card p-3 border-white/5 bg-white/[0.02]">
+                    <p className="text-[10px] text-white/30 uppercase tracking-wider mb-1">{kpi.l}</p>
+                    <p className={`text-lg font-bold ${kpi.c}`}>{kpi.v}</p>
+                  </div>
+                ))}
+              </div>
             {/* Fake chart bars */}
             <div className="glass rounded-xl p-4">
               <div className="text-xs text-white/30 mb-3">Revenue Over Time</div>
@@ -185,6 +191,7 @@ export default async function LandingPage() {
             </div>
           </div>
         </div>
+      </div>
       </section>
 
       {/* ── Stats ── */}
@@ -232,7 +239,7 @@ export default async function LandingPage() {
           {[
             { step: "01", icon: Upload, title: "Upload your file", desc: "Drag & drop any CSV or Excel. We detect columns automatically." },
             { step: "02", icon: BarChart, title: "Dashboard auto-generates", desc: "Charts, KPI cards, and trend lines appear instantly — no config needed." },
-            { step: "03", icon: Sparkles, title: "Get AI insights", desc: "Click one button for AI-written summaries, anomalies, and a 90-day forecast." },
+            { step: "03", icon: Sparkles, title: "Chat with your Data", desc: "Use the AI Data Assistant to ask specific questions and get predictive forecasts." },
           ].map((item) => (
             <div key={item.step} className="flex flex-col items-center text-center">
               <div className="relative mb-4">

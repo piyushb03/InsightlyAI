@@ -12,9 +12,9 @@ import ForecastChart from "@/components/ForecastChart";
 
 function KPICard({ label, value }) {
   return (
-    <div className="glass-card glow-border p-4 flex flex-col gap-1">
-      <p className="text-xs text-white/40 uppercase tracking-wider">{label}</p>
-      <p className="text-xl font-bold truncate">{value}</p>
+    <div className="glass-card glow-border p-4 flex flex-col gap-1 min-w-0">
+      <p className="text-[10px] text-white/40 uppercase tracking-wider truncate" title={label}>{label}</p>
+      <p className="text-lg sm:text-xl font-bold truncate">{value}</p>
     </div>
   );
 }
@@ -53,14 +53,18 @@ export default function DashboardGrid({ dashboard, insight: initialInsight, fore
     }
   }
 
-  async function handleGenerateForecast() {
+  async function handleGenerateForecast(params = {}) {
     setGeneratingForecast(true);
     try {
-      const res = await fetch(`/api/forecast/${dashboard.upload_id}/generate`, { method: "POST" });
+      const res = await fetch(`/api/forecast/${dashboard.upload_id}/generate`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(params),
+      });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Failed to generate forecast");
       setForecast(data);
-      toast.success("Forecast generated!");
+      toast.success("Forecast updated!");
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to generate forecast");
     } finally {
@@ -88,43 +92,46 @@ export default function DashboardGrid({ dashboard, insight: initialInsight, fore
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-start justify-between">
-        <div className="flex items-start gap-3">
-          <Link href="/dashboard" className="mt-0.5 text-white/30 hover:text-white/70 transition-colors">
+      <div className="flex flex-col sm:flex-row items-start justify-between gap-4 overflow-hidden">
+        <div className="flex items-start gap-3 w-full">
+          <Link href="/dashboard" className="mt-1 text-white/30 hover:text-white/70 transition-colors shrink-0">
             <ArrowLeft className="h-4 w-4" />
           </Link>
-          <div>
-            <h1 className="text-xl font-bold">{dashboard.name}</h1>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              {dashboard.upload?.filename} · {dashboard.upload?.row_count?.toLocaleString() ?? "—"} rows ·{" "}
+          <div className="min-w-0 flex-1">
+            <h1 className="text-xl sm:text-2xl font-bold break-words leading-tight">{dashboard.name}</h1>
+            <p className="text-xs text-muted-foreground mt-1 truncate">
+              {dashboard.upload?.filename}
+            </p>
+            <p className="text-[10px] text-muted-foreground/60 mt-0.5">
+              {dashboard.upload?.row_count?.toLocaleString() ?? "—"} rows ·{" "}
               {new Date(dashboard.upload?.created_at ?? "").toLocaleDateString()}
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-2 flex-shrink-0">
+        <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
           <Button
             size="sm"
             variant="outline"
-            className="gap-1.5 text-xs"
+            className="flex-1 sm:flex-none gap-1.5 text-[10px] sm:text-xs"
             onClick={handleGenerateInsight}
             disabled={generatingInsight}
           >
-            {generatingInsight ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
+            {generatingInsight ? <Loader2 className="h-3 w-3 animate-spin" /> : <Sparkles className="h-3 w-3" />}
             {insight ? "Refresh Insights" : "Generate Insights"}
           </Button>
           <Button
             size="sm"
             variant="outline"
-            className="gap-1.5 text-xs"
+            className="flex-1 sm:flex-none gap-1.5 text-[10px] sm:text-xs"
             onClick={handleGenerateForecast}
             disabled={generatingForecast}
           >
-            {generatingForecast ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <TrendingUp className="h-3.5 w-3.5" />}
+            {generatingForecast ? <Loader2 className="h-3 w-3 animate-spin" /> : <TrendingUp className="h-3 w-3" />}
             {forecast ? "Refresh Forecast" : "Generate Forecast"}
           </Button>
-          <Button size="sm" variant="outline" className="gap-1.5 text-xs" asChild>
+          <Button size="sm" variant="outline" className="flex-1 sm:flex-none gap-1.5 text-[10px] sm:text-xs" asChild>
             <a href={`/api/export/${dashboard.upload_id}`} download>
-              <Download className="h-3.5 w-3.5" />
+              <Download className="h-3 w-3" />
               Export PDF
             </a>
           </Button>
@@ -172,7 +179,13 @@ export default function DashboardGrid({ dashboard, insight: initialInsight, fore
       {/* Forecast */}
       {forecast?.data && (
         <div className="grid grid-cols-1">
-          <ForecastChart data={forecast.data} targetCol={forecast.target_col} />
+          <ForecastChart
+            data={forecast.data}
+            targetCol={forecast.target_col}
+            colSchema={dashboard.upload?.col_schema ?? []}
+            onRefresh={handleGenerateForecast}
+            isLoading={generatingForecast}
+          />
         </div>
       )}
 

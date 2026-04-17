@@ -1,89 +1,92 @@
-# InsightlyAI — Sales Intelligence Platform
+# InsightlyAI — Advanced Sales Intelligence SaaS
 
-InsightlyAI is a full-stack, AI-powered sales intelligence platform. It allows users to upload raw sales data (CSV/Excel) and instantly generates interactive dashboards, predictive forecasts using Prophet, and deep actionable insights using Groq LLMs.
+InsightlyAI is a professional-grade, AI-powered sales intelligence platform designed to transform raw data into actionable business strategy. Upload your sales data (CSV/Excel) and instantly unlock interactive dashboards, predictive forecasts, and an AI-driven data assistant.
 
 ---
 
-## 🌟 Features
+## 🌟 Key Features
 
-- **Instant Dashboards**: Upload a dataset and automatically get KPI cards, trend lines, and category visualizations without manual configuration.
-- **AI-Powered Insights**: Uses Groq-powered LLMs to generate executive summaries, top performers, anomalies, and actionable business recommendations from your dataset.
-- **Prophet Forecasting**: Built-in 90-day time-series forecasting for revenue and sales metrics.
-- **PDF Export**: One-click download of a beautifully formatted PDF report containing all AI insights and data summaries.
-- **Supabase Authentication**: Secure, modern authentication using Supabase (email/password-based login & signup).
-- **Mobile Responsive UI**: Fully responsive dashboard with a collapsible hamburger sidebar for mobile devices.
-- **Sleek UI**: Premium dark-mode-first design built with Next.js, Tailwind CSS, and shadcn/ui.
+### 1. Interactive AI Data Assistant
+- **Chat with your Data**: An interactive chat interface (powered by Groq & Llama-3) that allows you to ask natural language questions about your datasets.
+- **Context-Aware Insights**: The assistant understands your dataset's specific schema and statistics to provide accurate, data-driven answers.
+
+### 2. Personal Management & Security
+- **Secure Authentication**: Robust route protection and session management using Supabase SSR.
+- **User Profiles**: Custom profiles with avatar uploads (stored in Supabase Storage) and personal details.
+- **Account Security**: Update your email, reset your password, or permanently delete your account directly from the settings.
+
+### 3. Data & History Management
+- **Personal Workspace**: A dedicated area to manage your data history. View every upload, its row count, and processing status.
+- **Smart Cleanup**: Delete datasets with one click; the system automatically cleans up associated raw files, database records, and AI-generated insights.
+- **Advanced Search & Sort**: Quickly find specific dashboards using the real-time search and filter system.
+
+### 4. Advanced Analytics & Forecasting
+- **Customizable Forecasting**: Use the Prophet-powered forecaster to predict future trends. Choose your specific target metrics and look 90 days ahead.
+- **Auto-Generated Dashboards**: Instant visualizations (KPI cards, Trend lines, Category charts) tailored to your dataset without manual config.
+- **PDF Export**: Generate and download professional PDF reports of your findings.
 
 ---
 
 ## 🛠 Tech Stack
 
 ### Frontend
-- Next.js (App Router)
-- React & Tailwind CSS
-- Recharts (Data Visualization)
-- Lucide Icons & shadcn/ui
-- Supabase JS Client (Authentication)
+- **Framework**: Next.js (App Router)
+- **Styling**: Tailwind CSS & shadcn/ui
+- **Auth**: Supabase SSR (@supabase/ssr)
+- **Charts**: Recharts
+- **Icons**: Lucide React
 
 ### Backend
-- Python & Flask
-- Supabase (Auth and Database)
-- ReportLab (PDF Generation)
-- Prophet (Time-series Forecasting)
-- Groq API (LLM Insights)
+- **Engine**: Python & Flask
+- **Data Store**: Supabase (Postgres & RLS)
+- **AI Engine**: Groq (Llama-3.3-70b-versatile)
+- **Forecasting**: Prophet (Time-series)
+- **Storage**: Supabase Storage (Avatars & Datasets)
+- **Reports**: ReportLab (PDF)
 
 ---
 
-## 🚀 Setup Instructions (Local Development)
+## 🚀 Getting Started
 
-### 1. Clone the repository
+### 1. Clone & Install
 ```bash
 git clone https://github.com/piyushb03/InsightlyAI.git
 cd InsightlyAI
-````
+```
 
----
-
-### 2. Backend Setup
-
+### 2. Backend Configuration
+Navigate to `/backend`, install dependencies, and set up your `.env`:
 ```bash
-cd backend
-
-# Install dependencies
 pip install -r requirements.txt
-
-# Environment variables
-echo "GROQ_API_KEY=your_api_key" > .env
-echo "JWT_SECRET=your_secret_key" >> .env
-
-# Run server
-python main.py
+# .env file
+GROQ_API_KEY=your_key
+SUPABASE_URL=your_url
+SUPABASE_SERVICE_KEY=your_service_role_key
+SECRET_KEY=your_flask_secret
 ```
 
-*Backend runs at:* `http://localhost:8000`
+### 3. Frontend Configuration
+Navigate to `/frontend`, install dependencies, and set up your `.env.local`:
+```bash
+npm install
+# .env.local file
+NEXT_PUBLIC_API_URL=http://localhost:8000
+NEXT_PUBLIC_SUPABASE_URL=your_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+```
+
+### 4. Run the Platform
+- **Backend**: `python main.py` (Runs on port 8000)
+- **Frontend**: `npm run dev` (Runs on port 3000)
+
 ---
 
-### 3. Frontend Setup
+## 📄 Database Setup
+Run the following queries in your Supabase SQL Editor:
+- [SQL for Profiles & Avatars](https://github.com/piyushb03/InsightlyAI/blob/main/README.md) (See implementation guide for specific DDL).
 
-```bash
-cd frontend
+---
 
-# Install dependencies
-npm install
-
-# Environment variables
-echo "NEXT_PUBLIC_API_URL=http://localhost:8000" > .env.local
-echo "NEXT_PUBLIC_SUPABASE_URL=your_supabase_url" >> .env.local
-echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key" >> .env.local
-
-# Run development server
-npm run dev
-```
-*Frontend runs at:* `http://localhost:3000`
-
-
-
-
-
-
-
+## 🛡 License
+Distributed under the MIT License. See `LICENSE` for more information.

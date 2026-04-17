@@ -10,5 +10,3 @@ class Config:
     MAX_CONTENT_LENGTH = 50 * 1024 * 1024   # 50 MB
 
     GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
-    # Supabase — from Dashboard → Settings → API
-    SUPABASE_JWT_SECRET  = os.getenv("SUPABASE_JWT_SECRET", "")

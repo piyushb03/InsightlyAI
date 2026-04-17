@@ -1,28 +1,22 @@
-import jwt
 from functools import wraps
-from flask import request, jsonify, current_app
+from flask import request, jsonify
+from database import get_db
 
 
-def decode_supabase_token(token: str) -> dict | None:
+def verify_supabase_user(token: str) -> dict | None:
     """
-    Verify a Supabase-issued JWT using the project's JWT secret.
-    The secret is the value from:
-      Supabase Dashboard → Settings → API → JWT Settings → JWT Secret
-    Set it as SUPABASE_JWT_SECRET in backend/.env
+    Verify the token with Supabase and return user data.
     """
     try:
-        secret = current_app.config["SUPABASE_JWT_SECRET"]
-        payload = jwt.decode(
-            token,
-            secret,
-            algorithms=["HS256"],
-            audience="authenticated",  # Supabase always sets aud=authenticated
-            options={"verify_exp": True},
-        )
-        return payload
-    except jwt.ExpiredSignatureError:
+        supabase = get_db()
+        response = supabase.auth.get_user(token)
+        if response.user:
+            return {
+                "sub": response.user.id,
+                "email": response.user.email
+            }
         return None
-    except jwt.InvalidTokenError:
+    except Exception:
         return None
 
 
@@ -40,13 +34,13 @@ def require_auth(f):
         if not token:
             return jsonify({"error": "Missing authorization token"}), 401
 
-        payload = decode_supabase_token(token)
-        if not payload:
+        user_data = verify_supabase_user(token)
+        if not user_data:
             return jsonify({"error": "Invalid or expired token"}), 401
 
-        # Supabase stores the user UUID in the `sub` claim
-        request.current_user_id = payload["sub"]
-        request.current_user_email = payload.get("email", "")
+        # Store user info for use in routes
+        request.current_user_id = user_data["sub"]
+        request.current_user_email = user_data.get("email", "")
         return f(*args, **kwargs)
 
     return decorated

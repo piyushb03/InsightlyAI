@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { Upload, LayoutDashboard, ArrowRight } from "lucide-react";
+import { Upload, LayoutDashboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { flaskFetch, getAuthHeaders } from "@/lib/api";
 import { createClient } from "@/lib/supabase/server";
+import DashboardList from "./DashboardList";
 
 async function getDashboards(token) {
   try {
@@ -40,30 +41,7 @@ export default async function DashboardPage() {
       </div>
 
       {dashboards.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {dashboards.map((d) => (
-            <Link key={d.id} href={`/dashboard/${d.id}`}>
-              <div className="glass-card glow-border p-5 hover:bg-white/[0.07] transition-all hover:-translate-y-0.5 cursor-pointer group">
-                <div className="flex items-start justify-between mb-3">
-                  <div className="p-2 rounded-lg bg-violet-500/15 ring-1 ring-violet-500/20">
-                    <LayoutDashboard className="h-4 w-4 text-violet-400" />
-                  </div>
-                  <ArrowRight className="h-4 w-4 text-white/20 group-hover:text-white/50 transition-colors" />
-                </div>
-                <h3 className="font-semibold text-sm mb-1 truncate">{d.name}</h3>
-                <p className="text-xs text-white/30 truncate">{d.upload?.filename ?? "—"}</p>
-                <div className="flex items-center justify-between mt-3 pt-3 border-t border-white/5">
-                  <span className="text-xs text-white/25">
-                    {d.upload?.row_count?.toLocaleString() ?? "—"} rows
-                  </span>
-                  <span className="text-xs text-white/25">
-                    {new Date(d.created_at).toLocaleDateString()}
-                  </span>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
+        <DashboardList dashboards={dashboards} />
       ) : (
         <div className="flex flex-col items-center justify-center py-28 text-center glass-card">
           <div className="p-4 rounded-2xl bg-violet-500/10 ring-1 ring-violet-500/20 mb-5">

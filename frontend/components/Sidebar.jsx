@@ -11,6 +11,8 @@ import {
   Menu,
   X,
   Loader2,
+  Settings,
+  Briefcase,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -18,7 +20,9 @@ import { logout } from "@/app/actions/auth";
 
 const navItems = [
   { href: "/dashboard", label: "Dashboards", icon: LayoutDashboard },
+  { href: "/workspace", label: "Workspace", icon: Briefcase },
   { href: "/upload", label: "Upload Data", icon: Upload },
+  { href: "/settings", label: "Settings", icon: Settings },
 ];
 
 // ── Sidebar content (shared between mobile & desktop) ──────────────────────
