@@ -10,17 +10,12 @@ InsightlyAI is a professional-grade, AI-powered sales intelligence platform desi
 - **Chat with your Data**: An interactive chat interface (powered by Groq & Llama-3) that allows you to ask natural language questions about your datasets.
 - **Context-Aware Insights**: The assistant understands your dataset's specific schema and statistics to provide accurate, data-driven answers.
 
-### 2. Personal Management & Security
-- **Secure Authentication**: Robust route protection and session management using Supabase SSR.
-- **User Profiles**: Custom profiles with avatar uploads (stored in Supabase Storage) and personal details.
-- **Account Security**: Update your email, reset your password, or permanently delete your account directly from the settings.
-
-### 3. Data & History Management
+### 2. Data & History Management
 - **Personal Workspace**: A dedicated area to manage your data history. View every upload, its row count, and processing status.
 - **Smart Cleanup**: Delete datasets with one click; the system automatically cleans up associated raw files, database records, and AI-generated insights.
 - **Advanced Search & Sort**: Quickly find specific dashboards using the real-time search and filter system.
 
-### 4. Advanced Analytics & Forecasting
+### 3. Advanced Analytics & Forecasting
 - **Customizable Forecasting**: Use the Prophet-powered forecaster to predict future trends. Choose your specific target metrics and look 90 days ahead.
 - **Auto-Generated Dashboards**: Instant visualizations (KPI cards, Trend lines, Category charts) tailored to your dataset without manual config.
 - **PDF Export**: Generate and download professional PDF reports of your findings.
@@ -87,6 +82,3 @@ Run the following queries in your Supabase SQL Editor:
 - [SQL for Profiles & Avatars](https://github.com/piyushb03/InsightlyAI/blob/main/README.md) (See implementation guide for specific DDL).
 
 ---
-
-## 🛡 License
-Distributed under the MIT License. See `LICENSE` for more information.
