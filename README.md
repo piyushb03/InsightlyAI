@@ -1,4 +1,3 @@
-````markdown
 # InsightlyAI — Sales Intelligence Platform
 
 InsightlyAI is a full-stack, AI-powered sales intelligence platform. It allows users to upload raw sales data (CSV/Excel) and instantly generates interactive dashboards, predictive forecasts using Prophet, and deep actionable insights using Groq LLMs.
@@ -80,50 +79,7 @@ echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key" >> .env.local
 # Run development server
 npm run dev
 ```
-*The frontend will be available at `http://localhost:3000`*
-
----
-
-## 🌍 Deployment Instructions
-
-### Backend (Render)
-The backend is designed to be easily deployed on [Render.com](https://render.com) using the included `Procfile`.
-
-1. Create a new **Web Service** on Render.
-2. Link your GitHub repository.
-3. Configure the following settings:
-   - **Root Directory**: `backend`
-   - **Environment**: `Python`
-   - **Build Command**: `pip install -r requirements.txt`
-   - **Start Command**: `gunicorn --bind 0.0.0.0:$PORT main:app`
-4. Add your Environment Variables (`GROQ_API_KEY`, `JWT_SECRET`, `CORS_ORIGINS`).
-5. Deploy!
-
-### Frontend (Vercel)
-The frontend is optimized for deployment on [Vercel](https://vercel.com).
-
-1. Import your GitHub repository into Vercel.
-2. Set the **Framework Preset** to Next.js.
-3. Set the **Root Directory** to `frontend`.
-4. Add the Environment Variable: `NEXT_PUBLIC_API_URL` (pointing to your Render backend URL).
-5. Deploy! Vercel will automatically build and publish your site.
-
-> **Note on Cold Starts:** Render free-tier servers go to sleep after inactivity. The frontend intelligently pings the `/health` endpoint in the background to wake the server gracefully and provides users with a sleek "Initializing AI Engine" loading screen.
-
----
-
-## 🔌 Core API Endpoints
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| **GET** | `/health` | Application health check. Crucial for waking up Render servers. |
-| **POST** | `/api/auth/signup` | Register a new user. |
-| **POST** | `/api/auth/login` | Authenticate and retrieve JWT token. |
-| **POST** | `/api/uploads/` | Upload and securely parse a CSV/Excel dataset. |
-| **GET** | `/api/dashboards/<id>` | Fetch parsed dashboard configurations and statistics. |
-| **POST** | `/api/insights/<upload_id>/generate` | Trigger LLM to generate insights from statistics. |
-| **POST** | `/api/forecast/<upload_id>/generate` | Generate 90-day Prophet forecast. |
-| **GET** | `/api/export-report/<upload_id>` | Generate and download a PDF report containing AI insights. |
+*Frontend runs at:* `http://localhost:3000`
 
 ---
 ## 🎥 Demo
