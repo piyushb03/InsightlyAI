@@ -77,8 +77,3 @@ SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 
 ---
 
-## 📄 Database Setup
-Run the following queries in your Supabase SQL Editor:
-- [SQL for Profiles & Avatars](https://github.com/piyushb03/InsightlyAI/blob/main/README.md) (See implementation guide for specific DDL).
-
----
